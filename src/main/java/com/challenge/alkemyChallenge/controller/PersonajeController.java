@@ -17,9 +17,7 @@ import java.util.logging.Logger;
 @RequestMapping("/personaje")
 public class PersonajeController {
 
-
     private static final Logger LOGGER = Logger.getLogger("TestLog");
-
     private static Personaje personaje;
 
 
@@ -37,13 +35,10 @@ public class PersonajeController {
 
     }
 
-
     @GetMapping("/getPersonajes")
     public ResponseEntity<List<Personaje>> listarPersonajes() {
         return ResponseEntity.ok(personajeRepository.findAll());
-
     }
-
 
     @PutMapping("/updatePersonaje")
     public ResponseEntity updatePersonaje( @RequestBody Personaje personaje){
