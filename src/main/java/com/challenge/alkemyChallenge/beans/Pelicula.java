@@ -29,8 +29,6 @@ public class Pelicula {
     @Column(name="calificacion")
     private String calificacion;
 
-
-
     @ManyToOne(  fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "genero_id",referencedColumnName = "id")
     private Genero genero;

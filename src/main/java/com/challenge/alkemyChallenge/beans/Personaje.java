@@ -36,4 +36,6 @@ public class Personaje {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name="personaje_id", referencedColumnName="id")
     private List<Pelicula> peliculas;
+
+
 }
