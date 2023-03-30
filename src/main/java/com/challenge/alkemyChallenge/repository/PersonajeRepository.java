@@ -16,7 +16,7 @@ public interface PersonajeRepository extends JpaRepository <Personaje, Integer> 
             nativeQuery = true)
     List<Personaje> findPersonajesPelicula(@Param("id") Integer id);
 
-
+    List<Personaje> findByIdIn(List<Integer> ids);
 
 
 

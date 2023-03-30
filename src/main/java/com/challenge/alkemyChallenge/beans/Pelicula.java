@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,5 +35,11 @@ public class Pelicula {
     @ManyToOne(  fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "genero_id",referencedColumnName = "id")
     private Genero genero;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name="pelicula_id", referencedColumnName="id")
+    private List<Personaje> personajes;
+
+
 
 }
