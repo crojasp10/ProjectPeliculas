@@ -2,6 +2,7 @@ package com.challenge.alkemyChallenge.repository;
 
 
 import com.challenge.alkemyChallenge.beans.Pelicula;
+import com.challenge.alkemyChallenge.beans.Personaje;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,9 +17,9 @@ public interface PeliculaRepository extends JpaRepository <Pelicula, Integer> {
     Pelicula findById(int id);
 
     //Aquí se usa la query para traer los campos de las películas de un respectivo personaje.
-    @Query(value = "SELECT pelicula.id,pelicula.calificacion,pelicula.fecha_de_creacion,pelicula.imagen,pelicula.titulo,pelicula.genero_id from Personaje INNER JOIN personaje_pelicula on personaje_pelicula.personaje_id = personaje.id INNER JOIN Pelicula on personaje_pelicula.pelicula_id = pelicula.id where personaje.id = :id",
+    @Query(value = "SELECT pelicula.id,pelicula.calificacion,pelicula.fecha_de_creacion,pelicula.imagen,pelicula.titulo,pelicula.genero_id, pelicula_personaje.pelicula_id, pelicula_personaje.personaje_id from Pelicula INNER JOIN pelicula_personaje on pelicula_personaje.personaje_id = pelicula_id where pelicula_personaje.personaje_id = :id",
             nativeQuery = true)
-    List<Pelicula> findPeliculasPersonajes(@Param("id") Integer id);
+    List<Pelicula> findPeliculaPersonajes(@Param("id") Integer id);
 
     List<Pelicula> findAll();
 

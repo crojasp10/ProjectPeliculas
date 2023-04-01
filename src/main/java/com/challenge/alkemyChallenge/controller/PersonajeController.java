@@ -40,6 +40,11 @@ public class PersonajeController {
         return ResponseEntity.ok(personajeRepository.findAll());
     }
 
+    @GetMapping("/getPersonaje/{id}")
+    public ResponseEntity getPersonajeById(@PathVariable (value = "id") int id) {
+        return ResponseEntity.ok(personajeService.findPersonajeById(id));
+    }
+
     @PutMapping("/updatePersonaje")
     public ResponseEntity updatePersonaje( @RequestBody Personaje personaje){
         LOGGER.info("Update personaje");

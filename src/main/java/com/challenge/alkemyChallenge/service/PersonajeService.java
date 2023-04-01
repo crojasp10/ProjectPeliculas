@@ -1,11 +1,16 @@
 package com.challenge.alkemyChallenge.service;
 
 
+import com.challenge.alkemyChallenge.dto.PeliculaDto;
+import com.challenge.alkemyChallenge.dto.PersonajeDto;
 import com.challenge.alkemyChallenge.beans.Pelicula;
 import com.challenge.alkemyChallenge.beans.Personaje;
+import com.challenge.alkemyChallenge.mapper.PeliculaMapper;
+import com.challenge.alkemyChallenge.mapper.PersonajeMapper;
 import com.challenge.alkemyChallenge.repository.PeliculaRepository;
 import com.challenge.alkemyChallenge.repository.PersonajeRepository;
 import com.challenge.alkemyChallenge.response.CustomResponseDelete;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonajeService {
@@ -22,6 +28,12 @@ public class PersonajeService {
     private PersonajeRepository personajeRepository;
     @Autowired
     private PeliculaRepository peliculaRepository;
+
+    @Autowired
+    private PersonajeMapper personajeMapper;
+
+    @Autowired
+    private PeliculaMapper peliculaMapper;
 
     private static final Logger LOGGER = Logger.getLogger("PersonajeService");
 
@@ -55,6 +67,33 @@ public class PersonajeService {
             response = new CustomResponseDelete("Personaje with ID " + id + " deleted successfully", new ResponseEntity(HttpStatus.OK));
         }
         return response;
+    }
+
+    public ResponseEntity<PersonajeDto> findPersonajeById(int id) {
+        Personaje personaje = personajeRepository.findById(id);
+
+        PersonajeDto personajeDto = new PersonajeDto();
+
+        List<Pelicula> peliculas= peliculaRepository.findPeliculaPersonajes(id);
+
+        List<PeliculaDto> peliculasDto = peliculas.stream().map(pelicula->{
+            PeliculaDto peliculaDto = new PeliculaDto();
+            peliculaDto.setImagen(pelicula.getImagen());
+            peliculaDto.setCalificacion(pelicula.getCalificacion());
+            peliculaDto.setTitulo(pelicula.getTitulo());
+            peliculaDto.setFechaDeCreacion(pelicula.getFechaDeCreacion());
+            return peliculaDto;
+        }).collect(Collectors.toList());
+
+
+        personajeDto.setPeso(personaje.getPeso());
+        personajeDto.setEdad(personaje.getEdad());
+        personajeDto.setImagen(personaje.getImagen());
+        personajeDto.setNombre(personaje.getNombre());
+        personajeDto.setHistoria(personaje.getHistoria());
+        personajeDto.setPeliculasDto(peliculasDto);
+
+        return ResponseEntity.ok(personajeDto);
     }
 
 

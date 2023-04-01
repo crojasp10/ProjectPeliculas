@@ -33,5 +33,4 @@ public class Personaje {
     @Column(name = "historia")
     private String historia;
 
-    private List<Pelicula> peliculas;
 }
