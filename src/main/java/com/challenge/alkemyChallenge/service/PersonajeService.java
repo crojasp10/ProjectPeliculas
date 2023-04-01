@@ -59,16 +59,5 @@ public class PersonajeService {
 
 
 
-    public ResponseEntity<Personaje> getPersonajeById(int id) {
-
-        ResponseEntity response = null;
-        Personaje personaje = personajeRepository.findById(id);
-        List<Pelicula> peliculas = peliculaRepository.findPeliculasPersonajes(id);
-        LOGGER.info("INGRESA A GET PACIENTE");
-        personaje.setPeliculas(peliculas);
-        return ResponseEntity.ok(personaje);
-
-
-    }
 
 }

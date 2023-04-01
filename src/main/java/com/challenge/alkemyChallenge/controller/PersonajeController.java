@@ -52,11 +52,11 @@ public class PersonajeController {
         return ResponseEntity.ok(personajeService.deletePersonajeById(id));
     }
 //Aquí le paso el id a la url de la siguiente forma  http://localhost:8080/personaje?id=3 y me envía el personaje con id = 3
-    @GetMapping
+   /* @GetMapping
     public ResponseEntity listarPersonajesPelicula(@RequestParam (value = "id") int id) {
         return ResponseEntity.ok(personajeService.getPersonajeById(id));
 
-    }
+    }*/
 
 
 

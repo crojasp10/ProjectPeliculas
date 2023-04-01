@@ -19,4 +19,7 @@ public interface PeliculaRepository extends JpaRepository <Pelicula, Integer> {
     @Query(value = "SELECT pelicula.id,pelicula.calificacion,pelicula.fecha_de_creacion,pelicula.imagen,pelicula.titulo,pelicula.genero_id from Personaje INNER JOIN personaje_pelicula on personaje_pelicula.personaje_id = personaje.id INNER JOIN Pelicula on personaje_pelicula.pelicula_id = pelicula.id where personaje.id = :id",
             nativeQuery = true)
     List<Pelicula> findPeliculasPersonajes(@Param("id") Integer id);
+
+    List<Pelicula> findAll();
+
 }

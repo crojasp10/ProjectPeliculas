@@ -1,6 +1,7 @@
 package com.challenge.alkemyChallenge.beans;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -36,10 +39,10 @@ public class Pelicula {
     @JoinColumn(name = "genero_id",referencedColumnName = "id")
     private Genero genero;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name="pelicula_id", referencedColumnName="id")
+    @ManyToMany
+    @JoinTable(name = "pelicula_personaje", joinColumns = @JoinColumn(name = "pelicula_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "personaje_id", referencedColumnName = "id"))
     private List<Personaje> personajes;
-
 
 
 }

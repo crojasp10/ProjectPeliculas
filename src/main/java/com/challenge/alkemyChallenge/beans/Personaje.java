@@ -4,7 +4,9 @@ package com.challenge.alkemyChallenge.beans;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Getter
@@ -31,9 +33,5 @@ public class Personaje {
     @Column(name = "historia")
     private String historia;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name="personaje_id", referencedColumnName="id")
     private List<Pelicula> peliculas;
-
-
 }

@@ -39,19 +39,18 @@ public class PeliculaService {
         Pelicula pelicula1 = pelicula;
 
         List <Personaje> listaPersonajes =
-                pelicula.getPersonajes().stream().map(personaje -> {
-                    Integer id = personaje.getId();
-                    return personajeRepository.findById(id);
-                }).collect(Collectors.toList()).stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
+                pelicula.getPersonajes().stream()
+                        .filter(personaje -> personaje != null )
+                        .map(personaje -> personajeRepository.save(personaje))
+                        .collect(Collectors.toList());
 
         log.info("Los personajes SON: "+ listaPersonajes);
-        Genero genero1 = generoRepository.findById(pelicula.getGenero().getId());
+        //Genero genero1 = generoRepository.findById(pelicula.getGenero().getId());
+        Genero genero1 = pelicula.getGenero();
 
-        if (generoRepository.findById(pelicula.getGenero().getId()) != null) {
-            log.info("el genero es: " + generoRepository.findById(pelicula.getGenero().getId()));
+        if (genero1!= null) {
+            generoRepository.save(genero1);
+            log.info("el genero es: " + genero1);
             pelicula1.setId(pelicula.getId());
             pelicula1.setImagen(pelicula.getImagen());
             pelicula1.setTitulo(pelicula.getTitulo());
@@ -64,11 +63,17 @@ public class PeliculaService {
             response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return response;
-
     }
+
+
 
     public ResponseEntity getPeliculaById(int id) {
         return ResponseEntity.ok(peliculaRepository.findById(id));
+    }
+
+
+    public ResponseEntity getPeliculas() {
+        return ResponseEntity.ok(peliculaRepository.findAll());
     }
 
 

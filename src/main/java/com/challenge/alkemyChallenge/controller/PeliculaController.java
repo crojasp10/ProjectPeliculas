@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/pelicula")
 public class PeliculaController {
 
-
     @Autowired
     private PeliculaRepository peliculaRepository;
 
@@ -29,6 +28,9 @@ public class PeliculaController {
     @GetMapping("/getPelicula/{id}")
     public ResponseEntity getPelicula(@PathVariable (value = "id") int id) {
         return ResponseEntity.ok().header("El header es").body(peliculaService.getPeliculaById(id));
-
+    }
+    @GetMapping("/getPeliculas")
+    public ResponseEntity getPeliculas() {
+        return ResponseEntity.ok().header("El header es").body(peliculaService.getPeliculas());
     }
 }
