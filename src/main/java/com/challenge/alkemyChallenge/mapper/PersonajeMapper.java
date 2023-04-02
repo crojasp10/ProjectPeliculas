@@ -7,6 +7,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Mapper
 @Component
 public interface PersonajeMapper {
@@ -16,9 +18,8 @@ public interface PersonajeMapper {
     @Mapping(source = "peliculas", target = "peliculasDto")
     PersonajeDto personajeToPersonajeDto(Personaje personaje);
 
-
-
-
+    PersonajeDto toDto(Personaje personaje);
+    List<PersonajeDto> toDtoList(List<Personaje> personajes);
 
 
 }

@@ -9,6 +9,8 @@ import com.challenge.alkemyChallenge.beans.Pelicula;
 import com.challenge.alkemyChallenge.beans.Personaje;
 import com.challenge.alkemyChallenge.mapper.PeliculaMapper;
 import com.challenge.alkemyChallenge.mapper.PersonajeMapper;
+import com.challenge.alkemyChallenge.mapper.mapperImpl.PeliculaMapperImpl;
+import com.challenge.alkemyChallenge.mapper.mapperImpl.PersonajeMapperImpl;
 import com.challenge.alkemyChallenge.repository.GeneroRepository;
 import com.challenge.alkemyChallenge.repository.PeliculaRepository;
 import com.challenge.alkemyChallenge.repository.PersonajeRepository;
@@ -38,7 +40,10 @@ public class PersonajeService {
     private PersonajeMapper personajeMapper;
 
     @Autowired
-    private PeliculaMapper peliculaMapper;
+    private PersonajeMapperImpl personajeMapperImpl;
+
+    @Autowired
+    private PeliculaMapperImpl peliculaMapperImpl;
 
     private static final Logger LOGGER = Logger.getLogger("PersonajeService");
 
@@ -51,7 +56,7 @@ public class PersonajeService {
         if (personajeRepository.findById(personaje.getId()) != null) {
             personaje1.setId(personaje.getId());
             personaje1.setImagen(personaje.getImagen());
-            personaje1.setNombre(personaje.getNombre());
+            personaje1.setName(personaje.getName());
             personaje1.setEdad(personaje.getEdad());
             personaje1.setPeso(personaje.getPeso());
             personaje1.setHistoria(personaje.getHistoria());
@@ -74,39 +79,41 @@ public class PersonajeService {
         return response;
     }
 
-    public ResponseEntity<PersonajeDto> findPersonajeById(int id) {
-        Personaje personaje = personajeRepository.findById(id);
+    public ResponseEntity<PersonajeDto> findPersonajeByName(String name) {
+        Personaje personaje = personajeRepository.findByName(name);
 
+        PersonajeDto personajeDto = personajeMapperImpl.personajeToPersonajeDto(personaje);
 
-        PersonajeDto personajeDto = new PersonajeDto();
-
-        List<Pelicula> peliculas= peliculaRepository.findPeliculaPersonajes(personaje.getNombre());
+        List<Pelicula> peliculas= peliculaRepository.findPeliculaPersonajes(personaje.getName());
 
         List<PeliculaDto> peliculasDto = peliculas.stream().map(pelicula->{
-            PeliculaDto peliculaDto = new PeliculaDto();
-            Genero genero = generoRepository.findById(pelicula.getGenero().getId());
-            GeneroDto generoDto = new GeneroDto();
-            generoDto.setImagen(genero.getImagen());
-            generoDto.setNombre(genero.getNombre());
-            peliculaDto.setImagen(pelicula.getImagen());
-            peliculaDto.setCalificacion(pelicula.getCalificacion());
-            peliculaDto.setTitulo(pelicula.getTitulo());
-            peliculaDto.setFechaDeCreacion(pelicula.getFechaDeCreacion());
-            peliculaDto.setGenero(generoDto);
+            PeliculaDto peliculaDto = peliculaMapperImpl.peliculaToPeliculaDto(pelicula);
             return peliculaDto;
         }).collect(Collectors.toList());
 
-
-        personajeDto.setPeso(personaje.getPeso());
-        personajeDto.setEdad(personaje.getEdad());
-        personajeDto.setImagen(personaje.getImagen());
-        personajeDto.setNombre(personaje.getNombre());
-        personajeDto.setHistoria(personaje.getHistoria());
         personajeDto.setPeliculasDto(peliculasDto);
 
         return ResponseEntity.ok(personajeDto);
     }
 
+    public  List<PersonajeDto> findAll() {
+        List<PersonajeDto> personajesDto = personajeMapperImpl.toDtoList(personajeRepository.findAll());
+
+        List<PersonajeDto> listaPersonajes = personajesDto.stream().map(personajeDto -> {
+            PersonajeDto personajeDtoResult = personajeDto;
+            String nombre = personajeDto.getNombre();
+            List<Pelicula> peliculas= peliculaRepository.findPeliculaPersonajes(nombre);
+            List<PeliculaDto> peliculasDto = peliculas.stream().map(pelicula->{
+                PeliculaDto peliculaDto = peliculaMapperImpl.peliculaToPeliculaDto(pelicula);
+                        return peliculaDto;
+            }).collect(Collectors.toList());
+            personajeDtoResult.setPeliculasDto(peliculasDto);
+            return personajeDtoResult;
+        }).collect(Collectors.toList());
+
+
+        return (listaPersonajes);
+    }
 
 
 

@@ -19,7 +19,7 @@ public interface PersonajeRepository extends JpaRepository <Personaje, Integer> 
 
     List<Personaje> findByIdIn(List<Integer> ids);
 
-
+    Personaje findByName(String name);
 
 
 

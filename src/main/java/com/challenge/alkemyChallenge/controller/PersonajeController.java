@@ -2,6 +2,7 @@ package com.challenge.alkemyChallenge.controller;
 
 
 import com.challenge.alkemyChallenge.beans.Personaje;
+import com.challenge.alkemyChallenge.dto.PersonajeDto;
 import com.challenge.alkemyChallenge.repository.PersonajeRepository;
 import com.challenge.alkemyChallenge.service.PersonajeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +37,13 @@ public class PersonajeController {
     }
 
     @GetMapping("/getPersonajes")
-    public ResponseEntity<List<Personaje>> listarPersonajes() {
-        return ResponseEntity.ok(personajeRepository.findAll());
+    public ResponseEntity<List<PersonajeDto>> listarPersonajes() {
+        return ResponseEntity.ok(personajeService.findAll());
     }
 
-    @GetMapping("/getPersonaje/{id}")
-    public ResponseEntity getPersonajeById(@PathVariable (value = "id") int id) {
-        return ResponseEntity.ok(personajeService.findPersonajeById(id));
+    @GetMapping("/getPersonaje/{name}")
+    public ResponseEntity getPersonajeByName(@PathVariable (value = "name") String name) {
+        return ResponseEntity.ok(personajeService.findPersonajeByName(name));
     }
 
     @PutMapping("/updatePersonaje")

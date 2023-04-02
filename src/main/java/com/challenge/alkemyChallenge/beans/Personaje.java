@@ -25,7 +25,7 @@ public class Personaje {
     @Column(name = "imagen")
     private String imagen;
     @Column(name = "nombre")
-    private String nombre;
+    private String name;
     @Column(name = "edad")
     private String edad;
     @Column(name = "peso")
