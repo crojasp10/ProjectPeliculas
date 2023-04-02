@@ -1,12 +1,15 @@
 package com.challenge.alkemyChallenge.service;
 
 
+import com.challenge.alkemyChallenge.beans.Genero;
+import com.challenge.alkemyChallenge.dto.GeneroDto;
 import com.challenge.alkemyChallenge.dto.PeliculaDto;
 import com.challenge.alkemyChallenge.dto.PersonajeDto;
 import com.challenge.alkemyChallenge.beans.Pelicula;
 import com.challenge.alkemyChallenge.beans.Personaje;
 import com.challenge.alkemyChallenge.mapper.PeliculaMapper;
 import com.challenge.alkemyChallenge.mapper.PersonajeMapper;
+import com.challenge.alkemyChallenge.repository.GeneroRepository;
 import com.challenge.alkemyChallenge.repository.PeliculaRepository;
 import com.challenge.alkemyChallenge.repository.PersonajeRepository;
 import com.challenge.alkemyChallenge.response.CustomResponseDelete;
@@ -28,6 +31,8 @@ public class PersonajeService {
     private PersonajeRepository personajeRepository;
     @Autowired
     private PeliculaRepository peliculaRepository;
+    @Autowired
+    private GeneroRepository generoRepository;
 
     @Autowired
     private PersonajeMapper personajeMapper;
@@ -72,16 +77,22 @@ public class PersonajeService {
     public ResponseEntity<PersonajeDto> findPersonajeById(int id) {
         Personaje personaje = personajeRepository.findById(id);
 
+
         PersonajeDto personajeDto = new PersonajeDto();
 
-        List<Pelicula> peliculas= peliculaRepository.findPeliculaPersonajes(id);
+        List<Pelicula> peliculas= peliculaRepository.findPeliculaPersonajes(personaje.getNombre());
 
         List<PeliculaDto> peliculasDto = peliculas.stream().map(pelicula->{
             PeliculaDto peliculaDto = new PeliculaDto();
+            Genero genero = generoRepository.findById(pelicula.getGenero().getId());
+            GeneroDto generoDto = new GeneroDto();
+            generoDto.setImagen(genero.getImagen());
+            generoDto.setNombre(genero.getNombre());
             peliculaDto.setImagen(pelicula.getImagen());
             peliculaDto.setCalificacion(pelicula.getCalificacion());
             peliculaDto.setTitulo(pelicula.getTitulo());
             peliculaDto.setFechaDeCreacion(pelicula.getFechaDeCreacion());
+            peliculaDto.setGenero(generoDto);
             return peliculaDto;
         }).collect(Collectors.toList());
 
