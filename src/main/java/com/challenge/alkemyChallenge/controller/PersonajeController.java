@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 @RestController
 @CrossOrigin ( origins = "*" , methods= { RequestMethod. GET ,RequestMethod. POST,RequestMethod. PUT })
-@RequestMapping("/personaje")
+@RequestMapping("/characters")
 public class PersonajeController {
 
     private static final Logger LOGGER = Logger.getLogger("TestLog");
@@ -64,6 +64,11 @@ public class PersonajeController {
 
     }*/
 
+    @GetMapping
+    public ResponseEntity<List<Personaje>> buscarPorEdad(@RequestParam(value ="edad") String edad) {
+        List<Personaje> personajes = personajeRepository.findByEdad(edad);
+        return ResponseEntity.ok(personajes);
+    }
 
 
 }

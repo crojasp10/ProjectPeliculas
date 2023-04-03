@@ -1,13 +1,11 @@
 package com.challenge.alkemyChallenge.service;
 
 
-import com.challenge.alkemyChallenge.beans.Genero;
-import com.challenge.alkemyChallenge.dto.GeneroDto;
 import com.challenge.alkemyChallenge.dto.PeliculaDto;
 import com.challenge.alkemyChallenge.dto.PersonajeDto;
 import com.challenge.alkemyChallenge.beans.Pelicula;
 import com.challenge.alkemyChallenge.beans.Personaje;
-import com.challenge.alkemyChallenge.mapper.PeliculaMapper;
+
 import com.challenge.alkemyChallenge.mapper.PersonajeMapper;
 import com.challenge.alkemyChallenge.mapper.mapperImpl.PeliculaMapperImpl;
 import com.challenge.alkemyChallenge.mapper.mapperImpl.PersonajeMapperImpl;
@@ -20,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -83,16 +83,13 @@ public class PersonajeService {
         Personaje personaje = personajeRepository.findByName(name);
 
         PersonajeDto personajeDto = personajeMapperImpl.personajeToPersonajeDto(personaje);
-
         List<Pelicula> peliculas= peliculaRepository.findPeliculaPersonajes(personaje.getName());
 
         List<PeliculaDto> peliculasDto = peliculas.stream().map(pelicula->{
             PeliculaDto peliculaDto = peliculaMapperImpl.peliculaToPeliculaDto(pelicula);
             return peliculaDto;
         }).collect(Collectors.toList());
-
-        personajeDto.setPeliculasDto(peliculasDto);
-
+        personajeDto.setPeliculas(peliculasDto);
         return ResponseEntity.ok(personajeDto);
     }
 
@@ -107,14 +104,13 @@ public class PersonajeService {
                 PeliculaDto peliculaDto = peliculaMapperImpl.peliculaToPeliculaDto(pelicula);
                         return peliculaDto;
             }).collect(Collectors.toList());
-            personajeDtoResult.setPeliculasDto(peliculasDto);
+            personajeDtoResult.setPeliculas(peliculasDto);
             return personajeDtoResult;
         }).collect(Collectors.toList());
 
 
         return (listaPersonajes);
     }
-
 
 
 }

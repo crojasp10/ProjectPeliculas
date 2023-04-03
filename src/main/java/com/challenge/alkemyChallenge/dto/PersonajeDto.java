@@ -21,7 +21,7 @@ public class PersonajeDto {
 
     private String historia;
 
-    private List<PeliculaDto> peliculasDto;
+    private List<PeliculaDto> peliculas;
 
 
 

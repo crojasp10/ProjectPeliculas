@@ -41,7 +41,16 @@ public class PeliculaService {
         List <Personaje> listaPersonajes =
                 pelicula.getPersonajes().stream()
                         .filter(personaje -> personaje != null )
-                        .map(personaje -> personajeRepository.save(personaje))
+                        .peek(personaje -> {
+                            Personaje existingPersonaje = personajeRepository.findByName(personaje.getName());
+                               if(existingPersonaje != null) {
+                                   log.info("Personaje already exists");
+                                   personaje.setId(existingPersonaje.getId());
+                               } else {
+                                  personajeRepository.save(personaje);
+                               }
+                        }
+                                )
                         .collect(Collectors.toList());
 
         log.info("Los personajes SON: "+ listaPersonajes);
