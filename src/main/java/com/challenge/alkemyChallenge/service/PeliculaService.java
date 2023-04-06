@@ -81,13 +81,12 @@ public class PeliculaService {
 
         }
         return response;
-
     }
 
 
 
-    public ResponseEntity getPeliculaById(int id) {
-        return ResponseEntity.ok(peliculaRepository.findById(id));
+    public ResponseEntity getPeliculaByTitulo(String titulo) {
+        return ResponseEntity.ok(peliculaRepository.findByTitulo(titulo));
     }
 
 
@@ -95,6 +94,50 @@ public class PeliculaService {
         return ResponseEntity.ok(peliculaRepository.findAll());
     }
 
+
+    public ResponseEntity deletePeliculaById(int id) {
+
+        ResponseEntity response = null;
+        if (peliculaRepository.findById(id) == null) {
+            response = new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            peliculaRepository.deleteById(id);
+            response = new ResponseEntity(HttpStatus.OK);
+        }
+        return response;
+    }
+
+    public ResponseEntity updatePelicula(Pelicula pelicula) {
+
+        ResponseEntity response = null;
+        Pelicula existingPelicula = peliculaRepository.findById(pelicula.getId());
+        if (existingPelicula!=null){
+            List <Personaje> personajeList = pelicula.getPersonajes().stream().filter(personaje -> personaje != null )
+                    .peek(personaje -> {
+                                Personaje existingPersonaje = personajeRepository.findById(personaje.getId());
+                                if(existingPersonaje != null) {
+                                    log.info("Personaje already exists");
+                                    personajeRepository.save(personaje);
+                                }
+                            }
+                    )
+                    .collect(Collectors.toList());
+            Genero genero = generoRepository.findById(pelicula.getId());
+            if (genero!=null){
+                generoRepository.save(pelicula.getGenero());
+                pelicula.setGenero(genero);
+            }
+            pelicula.setPersonajes(personajeList);
+
+            response = ResponseEntity.ok(peliculaRepository.save(pelicula));
+        }
+        else {
+                response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+
+        return response;
+    }
 
 
 }

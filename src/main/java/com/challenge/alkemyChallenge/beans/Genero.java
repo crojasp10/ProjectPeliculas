@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Objects;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +26,13 @@ public class Genero {
     @Column(name="imagen")
     private String imagen;
 
-
+    public boolean equals(Genero o) {
+        o.setId(0);
+        if (this == o) return true;
+        if (!(o instanceof Genero)) return false;
+        Genero genero = (Genero) o;
+        return Objects.equals(nombre, genero.getNombre());
+    }
 
 
 }

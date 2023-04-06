@@ -8,5 +8,7 @@ public interface GeneroRepository extends JpaRepository <Genero, Integer> {
 
     Genero findById(int id);
 
+    Genero findByNombre(String nombre);
+
 
 }

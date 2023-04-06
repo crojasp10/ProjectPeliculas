@@ -3,6 +3,7 @@ package com.challenge.alkemyChallenge.controller;
 
 import com.challenge.alkemyChallenge.beans.Genero;
 import com.challenge.alkemyChallenge.repository.GeneroRepository;
+import com.challenge.alkemyChallenge.service.GeneroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 public class GeneroController {
 
     @Autowired
-    GeneroRepository generoRepository;
+    GeneroService generoService;
 
     @PostMapping("/newGenero")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Genero> insertarGenero(@RequestBody Genero genero) {
 
-        return ResponseEntity.ok(generoRepository.save(genero));
+        return generoService.saveGenero(genero);
 
     }
 

@@ -26,12 +26,25 @@ public class PeliculaController {
         return peliculaService.savePelicula(pelicula);
     }
 
-    @GetMapping("/getPelicula/{id}")
-    public ResponseEntity getPelicula(@PathVariable (value = "id") int id) {
-        return ResponseEntity.ok().header("El header es").body(peliculaService.getPeliculaById(id));
+    @GetMapping("/getPelicula/{titulo}")
+    public ResponseEntity getPelicula(@PathVariable (value = "titulo") String titulo) {
+        return ResponseEntity.ok().header("El header es").body(peliculaService.getPeliculaByTitulo(titulo));
     }
     @GetMapping("/getPeliculas")
     public ResponseEntity getPeliculas() {
         return ResponseEntity.ok().header("El header es").body(peliculaService.getPeliculas());
     }
+
+    @DeleteMapping("/deletePelicula/{id}")
+    public ResponseEntity deletePeliculaById(@PathVariable (value = "id") int id) {
+        System.out.println("Se elimina el Pelicula");
+        return peliculaService.deletePeliculaById(id);
+    }
+
+    @PutMapping("/updatePelicula")
+    public ResponseEntity updatePelicula( @RequestBody Pelicula pelicula){
+        System.out.println("Se recibe el personaje"+pelicula);
+        return peliculaService.updatePelicula(pelicula);
+    }
+
 }
