@@ -4,6 +4,7 @@ package com.challenge.alkemyChallenge.controller;
 
 import com.challenge.alkemyChallenge.beans.Pelicula;
 import com.challenge.alkemyChallenge.repository.PeliculaRepository;
+import com.challenge.alkemyChallenge.response.CustomResponse;
 import com.challenge.alkemyChallenge.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

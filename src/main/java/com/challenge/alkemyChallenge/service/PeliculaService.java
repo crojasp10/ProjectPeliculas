@@ -34,44 +34,54 @@ public class PeliculaService {
 
     public ResponseEntity savePelicula(Pelicula pelicula) {
 
+
         ResponseEntity response = null;
 
-        Pelicula pelicula1 = pelicula;
+        Pelicula existingPelicula = peliculaRepository.findByTitulo(pelicula.getTitulo());
+        if (existingPelicula!=null){
+            response = (existingPelicula.equals(pelicula))?ResponseEntity.status(HttpStatus.CONFLICT).body("La pelicula ya existe en la base de datos"):null;
+        }
+        else{
 
-        List <Personaje> listaPersonajes =
-                pelicula.getPersonajes().stream()
-                        .filter(personaje -> personaje != null )
-                        .peek(personaje -> {
-                            Personaje existingPersonaje = personajeRepository.findByName(personaje.getName());
-                               if(existingPersonaje != null) {
-                                   log.info("Personaje already exists");
-                                   personaje.setId(existingPersonaje.getId());
-                               } else {
-                                  personajeRepository.save(personaje);
-                               }
-                        }
-                                )
-                        .collect(Collectors.toList());
+            Pelicula pelicula1 = pelicula;
 
-        log.info("Los personajes SON: "+ listaPersonajes);
-        //Genero genero1 = generoRepository.findById(pelicula.getGenero().getId());
-        Genero genero1 = pelicula.getGenero();
+            List <Personaje> listaPersonajes =
+                    pelicula.getPersonajes().stream()
+                            .filter(personaje -> personaje != null )
+                            .peek(personaje -> {
+                                        Personaje existingPersonaje = personajeRepository.findByName(personaje.getName());
+                                        if(existingPersonaje != null) {
+                                            log.info("Personaje already exists");
+                                            personaje.setId(existingPersonaje.getId());
+                                        } else {
+                                            personajeRepository.save(personaje);
+                                        }
+                                    }
+                            )
+                            .collect(Collectors.toList());
 
-        if (genero1!= null) {
-            generoRepository.save(genero1);
-            log.info("el genero es: " + genero1);
-            pelicula1.setId(pelicula.getId());
-            pelicula1.setImagen(pelicula.getImagen());
-            pelicula1.setTitulo(pelicula.getTitulo());
-            pelicula1.setFechaDeCreacion(pelicula.getFechaDeCreacion());
-            pelicula1.setCalificacion(pelicula.getCalificacion());
-            pelicula1.setGenero(genero1);
-            pelicula1.setPersonajes(listaPersonajes);
-            response = ResponseEntity.ok(peliculaRepository.save(pelicula1));
-        }else {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            log.info("Los personajes SON: "+ listaPersonajes);
+            //Genero genero1 = generoRepository.findById(pelicula.getGenero().getId());
+            Genero genero1 = pelicula.getGenero();
+
+            if (genero1!= null) {
+                generoRepository.save(genero1);
+                log.info("el genero es: " + genero1);
+                pelicula1.setId(pelicula.getId());
+                pelicula1.setImagen(pelicula.getImagen());
+                pelicula1.setTitulo(pelicula.getTitulo());
+                pelicula1.setFechaDeCreacion(pelicula.getFechaDeCreacion());
+                pelicula1.setCalificacion(pelicula.getCalificacion());
+                pelicula1.setGenero(genero1);
+                pelicula1.setPersonajes(listaPersonajes);
+                response = ResponseEntity.ok(peliculaRepository.save(pelicula1));
+            }else {
+                response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
         }
         return response;
+
     }
 
 

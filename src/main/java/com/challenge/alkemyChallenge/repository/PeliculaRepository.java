@@ -22,4 +22,5 @@ public interface PeliculaRepository extends JpaRepository <Pelicula, Integer> {
 
     List<Pelicula> findAll();
 
+    Pelicula findByTitulo(String titulo);
 }

@@ -6,11 +6,11 @@ import org.springframework.http.ResponseEntity;
 
 @Getter
 @Setter
-public class CustomResponseDelete<P> {
+public class CustomResponse<P> {
     private String message;
     private ResponseEntity responseEntity;
 
-    public CustomResponseDelete(String message, ResponseEntity responseEntity) {
+    public CustomResponse(String message, ResponseEntity responseEntity) {
         this.message = message;
         this.responseEntity = responseEntity;
     }

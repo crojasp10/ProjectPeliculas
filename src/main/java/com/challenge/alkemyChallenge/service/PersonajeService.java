@@ -12,14 +12,12 @@ import com.challenge.alkemyChallenge.mapper.mapperImpl.PersonajeMapperImpl;
 import com.challenge.alkemyChallenge.repository.GeneroRepository;
 import com.challenge.alkemyChallenge.repository.PeliculaRepository;
 import com.challenge.alkemyChallenge.repository.PersonajeRepository;
-import com.challenge.alkemyChallenge.response.CustomResponseDelete;
+import com.challenge.alkemyChallenge.response.CustomResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -68,13 +66,13 @@ public class PersonajeService {
     }
 
 
-    public CustomResponseDelete deletePersonajeById(int id) {
-        CustomResponseDelete response = null;
+    public CustomResponse deletePersonajeById(int id) {
+        CustomResponse response = null;
         if(personajeRepository.findById(id)==null){
-            response = new CustomResponseDelete("Personaje with ID " + id + " not found",  new ResponseEntity(HttpStatus.NOT_FOUND)) ;
+            response = new CustomResponse("Personaje with ID " + id + " not found",  new ResponseEntity(HttpStatus.NOT_FOUND)) ;
         }else{
             personajeRepository.deleteById(id);
-            response = new CustomResponseDelete("Personaje with ID " + id + " deleted successfully", new ResponseEntity(HttpStatus.OK));
+            response = new CustomResponse("Personaje with ID " + id + " deleted successfully", new ResponseEntity(HttpStatus.OK));
         }
         return response;
     }

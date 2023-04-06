@@ -8,10 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -43,6 +40,19 @@ public class Pelicula {
     @JoinTable(name = "pelicula_personaje", joinColumns = @JoinColumn(name = "pelicula_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "personaje_id", referencedColumnName = "id"))
     private List<Personaje> personajes;
+
+
+
+    public boolean equals(Pelicula o) {
+        o.setId(0);
+        o.getPersonajes().forEach(personaje -> personaje.setId(0));
+        o.genero.setId(0);
+        if (this == o) return true;
+        if (!(o instanceof Pelicula)) return false;
+        Pelicula pelicula = (Pelicula) o;
+        return Objects.equals(titulo, pelicula.titulo);
+    }
+
 
 
 }
