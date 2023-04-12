@@ -1,6 +1,7 @@
 package com.challenge.alkemyChallenge.service;
 
 
+import com.challenge.alkemyChallenge.beans.Genero;
 import com.challenge.alkemyChallenge.dto.PeliculaDto;
 import com.challenge.alkemyChallenge.dto.PersonajeDto;
 import com.challenge.alkemyChallenge.beans.Pelicula;
@@ -14,6 +15,7 @@ import com.challenge.alkemyChallenge.repository.PeliculaRepository;
 import com.challenge.alkemyChallenge.repository.PersonajeRepository;
 import com.challenge.alkemyChallenge.response.CustomResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PersonajeService {
 
 
@@ -109,6 +112,63 @@ public class PersonajeService {
 
         return (listaPersonajes);
     }
+
+    public ResponseEntity savePersonaje(Personaje personaje) {
+
+
+        ResponseEntity response = null;
+
+        Personaje existingPersonaje = personajeRepository.findByName(personaje.getName());
+        if (existingPersonaje!=null){
+            response = (existingPersonaje.equals(personaje))?ResponseEntity.status(HttpStatus.CONFLICT).body("El personaje ya existe en la base de datos"):null;
+        }
+        else{
+
+            Personaje personaje1 = personaje;
+
+            List <Pelicula> listaPeliculas =
+                    personaje.getPeliculas().stream()
+                            .filter(pelicula -> pelicula != null )
+                            .peek(pelicula -> {
+                                Pelicula existingPelicula = peliculaRepository.findByTitulo(pelicula.getTitulo());
+                                        if(existingPelicula != null) {
+                                            log.info("Pelicula already exists");
+                                            pelicula.setId(existingPelicula.getId());
+                                        } else {
+                                            Genero genero1 = pelicula.getGenero();
+                                            generoRepository.save(genero1);
+                                            log.info("el genero es: " + genero1);
+                                            Pelicula peliculaNueva = new Pelicula();
+                                            peliculaNueva.setId(pelicula.getId());
+                                            peliculaNueva.setImagen(pelicula.getImagen());
+                                            peliculaNueva.setTitulo(pelicula.getTitulo());
+                                            peliculaNueva.setFechaDeCreacion(pelicula.getFechaDeCreacion());
+                                            peliculaNueva.setCalificacion(pelicula.getCalificacion());
+                                            peliculaNueva.setGenero(genero1);
+                                            peliculaRepository.save(peliculaNueva);
+                                        }
+                                    }
+                            )
+                            .collect(Collectors.toList());
+
+            log.info("Los personajes SON: "+ listaPeliculas);
+            //Genero genero1 = generoRepository.findById(pelicula.getGenero().getId());
+
+                personaje1.setId(personaje.getId());
+                personaje1.setImagen(personaje.getImagen());
+                personaje1.setName(personaje.getName());
+                personaje1.setEdad(personaje.getEdad());
+                personaje1.setPeso(personaje.getEdad());
+                personaje1.setHistoria(personaje.getHistoria());
+                personaje1.setPeliculas(listaPeliculas);
+                response = ResponseEntity.ok(personajeRepository.save(personaje1));
+
+        }
+        return response;
+    }
+
+
+
 
 
 }

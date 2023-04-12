@@ -42,7 +42,6 @@ public class Pelicula {
     private List<Personaje> personajes;
 
 
-
     public boolean equals(Pelicula o) {
         o.setId(0);
         o.getPersonajes().forEach(personaje -> personaje.setId(0));

@@ -30,9 +30,9 @@ public class PersonajeController {
 
     @PostMapping("/newPersonaje")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Personaje> insertarPersonaje(@RequestBody Personaje personaje) {
+    public ResponseEntity insertarPersonaje(@RequestBody Personaje personaje) {
         LOGGER.info("Se crea un nuevo personaje");
-        return ResponseEntity.ok(personajeRepository.save(personaje));
+        return ResponseEntity.ok(personajeService.savePersonaje(personaje));
 
     }
 
